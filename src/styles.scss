@@ -1,1 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css'; 
+@import '~ngx-toastr/toastr';
+
+html, body { height: 100%; }
+body { margin: 20px; padding: 20px; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: hidden;
+    font-size: 12px !important;}
+
+.flex-container {
+    display: flex;
+    &.flex-column {
+      flex-direction: column;
+    }
+    &.v-align-c {
+      align-items: center;
+    }
+    &.justify-center {
+      justify-content: center;
+    }
+    &.justify-between {
+      justify-content: space-between;
+    }
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .w-100 {
+    width: 100%;
+  }
+  .h-100 {
+    height: 100%;
+  }
+  .m-l-xxs {
+    margin-left: 5px;
+  }
+  .m-l-xs {
+    margin-left: 10px;
+  }
+  .m-r-xs {
+    margin-right: 10px !important;
+  }
+  .m-r-s {
+    margin-right: 20px;
+  }
+  .m-r-m {
+    margin-right: 30px;
+  }
+  .o-a {
+    overflow: auto;
+  }
+  .default-border {
+    border: 1px solid #dedede;
+  }

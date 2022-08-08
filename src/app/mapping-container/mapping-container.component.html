@@ -1,0 +1,169 @@
+<div class="mapping-container flex-container flex-column h-100">
+    <div class="flex-container selection-area">
+        <div class="m-r-m">
+            <mat-form-field appearance="fill">
+                <mat-label>Source Database</mat-label>
+                <mat-select [(value)]="selected">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let db of sourceDB" [value]="db.dbName">{{db.dbName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="m-r-m">
+            <mat-form-field appearance="fill">
+                <mat-label>Select Source Table</mat-label>
+                <mat-select [(value)]="selected">
+                    <mat-option>None</mat-option>
+                    <mat-option value="option1">Option 1</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="m-r-m">
+            <mat-form-field appearance="fill">
+                <mat-label>Destination Database</mat-label>
+                <mat-select [(value)]="selected">
+                    <mat-option>None</mat-option>
+                    <mat-option value="option1">Option 1</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="m-r-m">
+            <mat-form-field appearance="fill">
+                <mat-label>Select Destination Table</mat-label>
+                <mat-select [(value)]="selected">
+                    <mat-option>None</mat-option>
+                    <mat-option value="option1">Option 1</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="flex-container flex-1">
+        <mat-accordion class="w-100">
+            <mat-expansion-panel [expanded]="panelOpenState === 'matching'" (opened)="panelOpenState = 'matching'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Availbale && Matching Column Details
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="flex-container justify-between table-container o-a">
+                    <div class="m-r-m w-100  ">
+                        <div class="table-header">Source Table Columns Details</div>
+                        <div class="">
+                            <table mat-table [dataSource]="dataSource" class=" w-100">
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                </ng-container>
+
+
+                                <!-- type Column -->
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef> Data Type </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="m-r-m w-100  ">
+                        <div class="table-header">Destination Table Columns Details</div>
+                        <div class="">
+                            <table mat-table [dataSource]="dataSource" class=" w-100">
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                </ng-container>
+
+
+                                <!-- type Column -->
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef> Data Type </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="m-r-m w-100  ">
+                        <div class="table-header">Mathcing Columns of Both Tables</div>
+                        <div class="">
+                            <table mat-table [dataSource]="dataSource" class=" w-100">
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                </ng-container>
+
+
+                                <!-- type Column -->
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef> Data Type </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel  [expanded]="panelOpenState === 'mis-matching'" (opened)="panelOpenState = 'mis-matching'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Mismatching Column Details
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="mis-matching-container">
+                    <div  cdkDropListGroup>
+                        <div class="item-list-container">
+                            <h2>Source</h2>
+                
+                            <div cdkDropList [cdkDropListData]="todo" class="list-item" (cdkDropListDropped)="drop($event)">
+                                <div class="item-box" *ngFor="let item of todo" cdkDrag cdkDragBoundary=".mis-matching-container">{{item}}</div>
+                            </div>
+                        </div>
+                
+                        <div class="item-list-container">
+                            <h2>Destination</h2>
+                
+                            <div cdkDropList [cdkDropListData]="done" class="list-item" (cdkDropListDropped)="drop($event)">
+                                <div class="item-box" *ngFor="let item of done" cdkDrag cdkDragBoundary=".mis-matching-container">{{item}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        
+                        <button mat-raised-button color="primary">Map All Columns</button>
+                        <!-- <mat-card class="example-card">
+                            <mat-card-header>
+                              <mat-card-title>Mathcing with Existing Clients</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                              <p>
+                                Found following columns mapped with previous client, Do you want to map thease columns with selected client as well?
+                              </p>
+                            </mat-card-content>
+                            <mat-card-actions>
+                              <button mat-button color="primary">YES</button>
+                              <button mat-button>NO</button>
+                            </mat-card-actions>
+                          </mat-card> -->
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
