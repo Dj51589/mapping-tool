@@ -10,7 +10,7 @@ export class ApiCallsService {
   constructor(private http: HttpClient) { }
 
   get(url: string) {
-    return this.http.get(environment.serverUrl + url, {withCredentials: true});
+    return this.http.get(environment.serverUrl + url);
   }
 
   post(url: string, payload = {}) {

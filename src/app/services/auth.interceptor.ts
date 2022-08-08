@@ -19,7 +19,6 @@ export class AuthInterceptor implements HttpInterceptor {
         withCredentials: true,
         setHeaders: {
           // Authorization: `Bearer 2121212232323232`,
-          
         },
       });
     }
