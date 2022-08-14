@@ -3,8 +3,13 @@
 @import '~ngx-toastr/toastr';
 
 html, body { height: 100%; }
-body { margin: 20px; padding: 20px; font-family: Roboto, "Helvetica Neue", sans-serif; overflow: hidden;
-    font-size: 12px !important;}
+body { 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    overflow: hidden;
+    font-size: 12px !important;
+    margin: 20px;
+    height: calc(100% - 40px);
+  }
 
 .flex-container {
     display: flex;
@@ -51,3 +56,57 @@ body { margin: 20px; padding: 20px; font-family: Roboto, "Helvetica Neue", sans-
   .default-border {
     border: 1px solid #dedede;
   }
+
+  .no-border {
+    border: 0px !important;
+  }
+  .no-record {
+    img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.section-loader {
+  position: relative;
+  pointer-events: none;
+  &::after {
+      position: absolute;
+      content: "";
+      width: 50px;
+      height: 50px;
+      left: 50%;
+      top: 50%;
+      z-index: 9999;
+      background: url("./assets/images/spinner.png") no-repeat;
+      background-position: 50%;
+      background-size: 50px;
+      animation: rotating 2s linear infinite;
+  }
+  
+}
+
+.ngx-toastr {
+  padding: 20px !important;
+  border-radius: 8px !important;
+  .toast-message {
+    margin-left: 25px;
+  }
+}
+
+
+.mat-expansion-panel-header {
+  background: #f5f5f5 !important;
+  height: 48px !important;
+}
+.mat-expansion-panel-body {
+  padding: 20px !important;
+}

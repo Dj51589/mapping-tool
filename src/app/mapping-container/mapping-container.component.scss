@@ -28,6 +28,10 @@
     background: white;
     font-size: 14px;
   }
+
+  .table-container {
+    min-height: 250px;
+  }
   
   .cdk-drag-preview {
     box-sizing: border-box;
@@ -55,6 +59,13 @@
   
 
   .mapping-container {
+    .selection-header {
+      border-bottom: 1px solid #dedede;
+      margin-bottom: 10px;
+      > div {
+        padding: 10px;
+      }
+    }
     table.mat-table {
       border: 1px solid #dedede;
     }
@@ -66,12 +77,25 @@
       text-align: center;
       border: 1px solid #dedede;
       border-bottom: 0px;
+      &.no-record {
+        border-bottom: 1px;
+      }
     }
     .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
       margin: 20px 0px;
     }
     .mis-matching-container {
-      
+      display: flex; 
+      min-height: 250px;
+      .col-container {
+        flex-basis: 50%;
+        border: 1px solid #dedede;
+        margin: 0px 10px;
+        ul {
+          list-style-type: none;
+          padding: 10px;
+        }
+      }
     }
     .mat-expansion-panel {
       ::ng-deep {
@@ -85,5 +109,15 @@
       .mat-card-header-text {
         margin: 0px;
       }
+    }
+  }
+
+  .unmatched-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+    .radio-button {
+      margin: 5px;
     }
   }

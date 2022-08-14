@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private toastr: ToastrService) { } intercept(request: HttpRequest<any>, next: HttpHandler) {
     if (!request.url.includes('login')) {
       request = request.clone({
-        withCredentials: true,
+        withCredentials: false,
         setHeaders: {
           // Authorization: `Bearer 2121212232323232`,
         },

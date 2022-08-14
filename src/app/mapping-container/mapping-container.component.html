@@ -1,50 +1,47 @@
-<div class="mapping-container flex-container flex-column h-100">
-    <div class="flex-container selection-area">
-        <div class="m-r-m">
-            <mat-form-field appearance="fill">
-                <mat-label>Source Database</mat-label>
-                <mat-select [(value)]="selected">
-                    <mat-option>None</mat-option>
-                    <mat-option *ngFor="let db of sourceDB" [value]="db.dbName">{{db.dbName}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="m-r-m">
-            <mat-form-field appearance="fill">
-                <mat-label>Select Source Table</mat-label>
-                <mat-select [(value)]="selected">
-                    <mat-option>None</mat-option>
-                    <mat-option value="option1">Option 1</mat-option>
-                    <mat-option value="option2">Option 2</mat-option>
-                    <mat-option value="option3">Option 3</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="m-r-m">
-            <mat-form-field appearance="fill">
-                <mat-label>Destination Database</mat-label>
-                <mat-select [(value)]="selected">
-                    <mat-option>None</mat-option>
-                    <mat-option value="option1">Option 1</mat-option>
-                    <mat-option value="option2">Option 2</mat-option>
-                    <mat-option value="option3">Option 3</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-        <div class="m-r-m">
-            <mat-form-field appearance="fill">
-                <mat-label>Select Destination Table</mat-label>
-                <mat-select [(value)]="selected">
-                    <mat-option>None</mat-option>
-                    <mat-option value="option1">Option 1</mat-option>
-                    <mat-option value="option2">Option 2</mat-option>
-                    <mat-option value="option3">Option 3</mat-option>
-                </mat-select>
-            </mat-form-field>
+<div class="mapping-container flex-container flex-column h-100" [ngClass]="{'section-loader': isLoader}">
+    <div class="flex-container selection-header">
+        <div class="flex-container w-100">
+            <div class="m-r-m">
+                <mat-form-field appearance="fill">
+                    <mat-label>Source Database</mat-label>
+                    <mat-select [(ngModel)]="srcDB" (selectionChange)="getTable(srcDB, 'src');">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let db of sourceDB" [value]="db.dbName">{{db.dbName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="m-r-m">
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Source Table</mat-label>
+                    <mat-select [(ngModel)]="srcTbl" (selectionChange)="getColumns(srcDB, srcTbl, 'src');">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let tbl of sourceTables" [value]="tbl.tableName">{{tbl.tableName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="m-r-m">
+                <mat-form-field appearance="fill">
+                    <mat-label>Destination Database</mat-label>
+                    <mat-select [(ngModel)]="destDB" (selectionChange)="getTable(destDB, 'dest');">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let db of destinationDB" [value]="db.dbName">{{db.dbName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="m-r-m">
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Destination Table</mat-label>
+                    <mat-select [(ngModel)]="destTbl" (selectionChange)="getColumns(destDB, destTbl, 'dest');">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let tbl of destinationTables" [value]="tbl.tableName">{{tbl.tableName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
         </div>
     </div>
-    <div class="flex-container flex-1">
-        <mat-accordion class="w-100">
+    <div class="flex-container flex-1 selection-area o-a">
+        <mat-accordion class="w-100" multi>
             <mat-expansion-panel [expanded]="panelOpenState === 'matching'" (opened)="panelOpenState = 'matching'">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -52,81 +49,127 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="flex-container justify-between table-container o-a">
-                    <div class="m-r-m w-100  ">
-                        <div class="table-header">Source Table Columns Details</div>
-                        <div class="">
-                            <table mat-table [dataSource]="dataSource" class=" w-100">
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="name">
+                    <div class="m-r-m w-100"
+                        [ngClass]="{'default-border': !sourceTblCols || sourceTblCols.length === 0}">
+                        <div class="table-header"
+                            [ngClass]="{'no-border': !sourceTblCols || sourceTblCols.length === 0}">Source Table
+                            <b>{{srcTbl}}</b> Columns Details
+                        </div>
+                        <div class="" *ngIf="sourceTblCols && sourceTblCols.length > 0">
+                            <table mat-table [dataSource]="sourceTblCols" class=" w-100">
+
+                                <ng-container matColumnDef="columnName">
                                     <th mat-header-cell *matHeaderCellDef> Name </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.columnName}} </td>
                                 </ng-container>
 
-
-                                <!-- type Column -->
-                                <ng-container matColumnDef="type">
+                                <ng-container matColumnDef="dataType">
                                     <th mat-header-cell *matHeaderCellDef> Data Type </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.dataType}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
                         </div>
+                        <div class="no-record h-100"
+                            *ngIf="!isLoader && (!sourceTblCols || sourceTblCols.length === 0)">
+                            <app-no-record-found [message]="'No Source Column availble'"></app-no-record-found>
+                        </div>
                     </div>
-                    <div class="m-r-m w-100  ">
-                        <div class="table-header">Destination Table Columns Details</div>
-                        <div class="">
-                            <table mat-table [dataSource]="dataSource" class=" w-100">
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="name">
+                    <div class="m-r-m w-100"
+                        [ngClass]="{'default-border': !destinationTblCols || destinationTblCols.length === 0}">
+                        <div class="table-header"
+                            [ngClass]="{'no-border': !destinationTblCols || destinationTblCols.length === 0}">
+                            Destination Table <b>{{destTbl}}</b> Columns Details</div>
+                        <div class="" *ngIf="destinationTblCols && destinationTblCols.length > 0">
+                            <table mat-table [dataSource]="destinationTblCols" class=" w-100">
+
+                                <ng-container matColumnDef="columnName">
                                     <th mat-header-cell *matHeaderCellDef> Name </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.columnName}} </td>
                                 </ng-container>
 
 
-                                <!-- type Column -->
-                                <ng-container matColumnDef="type">
+                                <ng-container matColumnDef="dataType">
                                     <th mat-header-cell *matHeaderCellDef> Data Type </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.dataType}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
                         </div>
+                        <div class="no-record h-100"
+                            *ngIf="!isLoader && (!destinationTblCols || destinationTblCols.length === 0)">
+                            <app-no-record-found [message]="'No Destination Column availble'"></app-no-record-found>
+                        </div>
                     </div>
-                    <div class="m-r-m w-100  ">
-                        <div class="table-header">Mathcing Columns of Both Tables</div>
-                        <div class="">
-                            <table mat-table [dataSource]="dataSource" class=" w-100">
-                                <!-- Name Column -->
-                                <ng-container matColumnDef="name">
+                    <div class="m-r-m w-100" [ngClass]="{'default-border': !matchedCols || matchedCols.length === 0}">
+                        <div class="table-header" [ngClass]="{'no-border': !matchedCols || matchedCols.length === 0}">
+                            Mapped Columns of <b>{{srcTbl}}</b> to <b>{{destTbl}}</b></div>
+                        <div class="" *ngIf="matchedCols && matchedCols.length > 0">
+                            <table mat-table [dataSource]="matchedCols" class=" w-100">
+
+                                <ng-container matColumnDef="columnName">
                                     <th mat-header-cell *matHeaderCellDef> Name </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.columnName}} </td>
                                 </ng-container>
 
-
-                                <!-- type Column -->
-                                <ng-container matColumnDef="type">
+                                <ng-container matColumnDef="dataType">
                                     <th mat-header-cell *matHeaderCellDef> Data Type </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                    <td mat-cell *matCellDef="let element"> {{element.dataType}} </td>
                                 </ng-container>
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
+                        </div>
+                        <div class="no-record h-100" *ngIf="!isLoader && (!matchedCols || matchedCols.length === 0)">
+                            <app-no-record-found [message]="'No Matching Column availble'"></app-no-record-found>
                         </div>
                     </div>
                 </div>
             </mat-expansion-panel>
-            <mat-expansion-panel  [expanded]="panelOpenState === 'mis-matching'" (opened)="panelOpenState = 'mis-matching'">
+            <mat-expansion-panel>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         Mismatching Column Details
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="mis-matching-container">
+                    <ng-container *ngIf="sourceUnMatchedCols.length > 0 && destinationUnMatchedCols.length > 0">
+                        <div class="flex col-container">
+                            <label id="radio-group-label">Select Source Column to Map</label>
+                            {{sourceColToMap && sourceColToMap.columnName}}
+                            <mat-radio-group aria-labelledby="radio-group-label" 
+                                class="unmatched-radio-group"
+                                [(ngModel)]="sourceColToMap">
+                                <mat-radio-button class="radio-button" *ngFor="let sourceCol of sourceUnMatchedCols"
+                                    [value]="sourceCol">
+                                    {{sourceCol.columnName}}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div class="flex col-container">
+                            <label>Select Column(s) to Map with</label>
+                            <ul>
+                                <li *ngFor="let destCol of destinationUnMatchedCols">
+                                  <mat-checkbox [(ngModel)]="destCol.selected" (ngModelChange)="setDestMapColumns()">
+                                    {{destCol.columnName}}
+                                  </mat-checkbox>
+                                </li>
+                              </ul>
+                        </div>
+                        <div class="flex-container v-align-c">
+                            <button mat-raised-button color="primary" type="button" (click)="mapColumns();">Map Column</button>
+                        </div>
+                    </ng-container>
+                    <div class="flex-container justify-center ng-star-inserted v-align-c w-100" *ngIf="sourceUnMatchedCols.length === 0 || destinationUnMatchedCols.length === 0">
+                        <app-no-record-found [message]="'No data found to map'"></app-no-record-found>
+                    </div>
+                </div>
+                <!-- <div class="mis-matching-container">
                     <div  cdkDropListGroup>
                         <div class="item-list-container">
                             <h2>Source</h2>
@@ -147,22 +190,8 @@
                     <div>
                         
                         <button mat-raised-button color="primary">Map All Columns</button>
-                        <!-- <mat-card class="example-card">
-                            <mat-card-header>
-                              <mat-card-title>Mathcing with Existing Clients</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                              <p>
-                                Found following columns mapped with previous client, Do you want to map thease columns with selected client as well?
-                              </p>
-                            </mat-card-content>
-                            <mat-card-actions>
-                              <button mat-button color="primary">YES</button>
-                              <button mat-button>NO</button>
-                            </mat-card-actions>
-                          </mat-card> -->
                     </div>
-                </div>
+                </div> -->
             </mat-expansion-panel>
         </mat-accordion>
     </div>
